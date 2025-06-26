@@ -1,11 +1,8 @@
 <?php
 session_start();
 
-// Configuración de base de datos
-$host = 'localhost';
-$dbname = 'sistema_tickets_kube';
-$username = 'root';
-$password = '';
+// Usar configuración automática
+require_once 'config.php';
 
 // Verificar si el usuario está logueado
 $user_logged_in = isset($_SESSION['user_id']);
@@ -19,18 +16,10 @@ if (!$user_logged_in) {
 
 // Conectar a la base de datos
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $config = Config::getInstance();
+    $pdo = $config->getDbConnection();
 } catch(PDOException $e) {
-    try {
-        $pdo_temp = new PDO("mysql:host=$host;charset=utf8mb4", $username, $password);
-        $pdo_temp->exec("CREATE DATABASE IF NOT EXISTS $dbname");
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        include 'database/setup.php';
-    } catch(PDOException $e2) {
-        die("Error de conexión: " . $e2->getMessage());
-    }
+    die("Error de conexión: " . $e->getMessage());
 }
 
 // Obtener estadísticas según el rol del usuario

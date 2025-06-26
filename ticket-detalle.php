@@ -7,15 +7,12 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Configuración de base de datos
-$host = 'localhost';
-$dbname = 'sistema_tickets_kube';
-$username = 'root';
-$password = '';
+// Usar configuración automática
+require_once 'config.php';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $config = Config::getInstance();
+    $pdo = $config->getDbConnection();
 } catch(PDOException $e) {
     die("Error de conexión: " . $e->getMessage());
 }

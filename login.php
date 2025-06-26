@@ -15,15 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (!empty($email) && !empty($password)) {
-        // Configuración de base de datos
-        $host = 'localhost';
-        $dbname = 'sistema_tickets_kube';
-        $username = 'root';
-        $db_password = '';
+        // Usar configuración automática
+        require_once 'config.php';
         
         try {
-            $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $db_password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $config = Config::getInstance();
+            $pdo = $config->getDbConnection();
             
             // Buscar usuario
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
@@ -43,35 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Email o contraseña incorrectos';
             }
         } catch(PDOException $e) {
-            // Si hay error de base de datos, crear usuario admin por defecto
-            try {
-                $pdo_temp = new PDO("mysql:host=$host;charset=utf8mb4", $username, $db_password);
-                $pdo_temp->exec("CREATE DATABASE IF NOT EXISTS $dbname");
-                $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $db_password);
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                
-                // Crear tablas
-                include 'database/setup.php';
-                
-                // Intentar login nuevamente
-                $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-                $stmt->execute([$email]);
-                $user = $stmt->fetch();
-                
-                if ($user && password_verify($password, $user['password'])) {
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['user_name'] = $user['name'];
-                    $_SESSION['user_email'] = $user['email'];
-                    $_SESSION['user_role'] = $user['role'];
-                    
-                    header('Location: index.php');
-                    exit;
-                } else {
-                    $error = 'Email o contraseña incorrectos';
-                }
-            } catch(PDOException $e2) {
-                $error = 'Error de conexión a la base de datos';
-            }
+            $error = 'Error de conexión a la base de datos. ' . $e->getMessage();
         }
     } else {
         $error = 'Por favor complete todos los campos';
