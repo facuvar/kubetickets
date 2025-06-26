@@ -30,8 +30,108 @@ try {
         echo "📋 Base de datos vacía, ejecutando migración...\n";
     }
     
-    // Ejecutar migración
-    include 'migrate.php';
+    // Ejecutar migración usando la conexión correcta
+    echo "🔧 Creando tablas necesarias...\n";
+    
+    // Crear tabla users si no existe
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            email VARCHAR(100) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            role ENUM('admin', 'agente', 'cliente') DEFAULT 'cliente',
+            company VARCHAR(100) NULL,
+            phone VARCHAR(20) NULL,
+            status ENUM('activo', 'inactivo') DEFAULT 'activo',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )
+    ");
+    
+    // Crear tabla tickets si no existe
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS tickets (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(200) NOT NULL,
+            description TEXT NOT NULL,
+            status ENUM('abierto', 'proceso', 'cerrado') DEFAULT 'abierto',
+            priority ENUM('baja', 'media', 'alta', 'critica') DEFAULT 'media',
+            cliente_id INT NOT NULL,
+            agente_id INT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            closed_at TIMESTAMP NULL,
+            ticket_number VARCHAR(50) UNIQUE NULL,
+            subject VARCHAR(255) NULL,
+            category VARCHAR(100) NULL,
+            FOREIGN KEY (cliente_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (agente_id) REFERENCES users(id) ON DELETE SET NULL
+        )
+    ");
+    
+    // Crear tabla ticket_messages si no existe
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS ticket_messages (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            ticket_id INT NOT NULL,
+            user_id INT NOT NULL,
+            message TEXT NOT NULL,
+            is_internal BOOLEAN DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )
+    ");
+    
+    // Crear tabla ticket_attachments si no existe
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS ticket_attachments (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            ticket_id INT NULL,
+            message_id INT NULL,
+            filename VARCHAR(255) NOT NULL,
+            original_filename VARCHAR(255) NOT NULL,
+            file_path VARCHAR(500) NOT NULL,
+            file_size INT NOT NULL,
+            file_type VARCHAR(100) NOT NULL,
+            uploaded_by INT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
+            FOREIGN KEY (message_id) REFERENCES ticket_messages(id) ON DELETE CASCADE,
+            FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE
+        )
+    ");
+    
+    // Crear tabla system_config si no existe
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS system_config (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            config_key VARCHAR(50) UNIQUE NOT NULL,
+            config_value TEXT NULL,
+            description VARCHAR(200) NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        )
+    ");
+    
+    // Insertar configuración inicial si no existe
+    $default_config = [
+        ['company_name', 'KubeAgency', 'Nombre de la empresa'],
+        ['company_email', 'info@kubeagency.co', 'Email principal de notificaciones'],
+        ['tickets_per_page', '20', 'Número de tickets por página'],
+        ['max_file_size', '10485760', 'Tamaño máximo de archivos en bytes (10MB)'],
+        ['allowed_file_types', 'pdf,doc,docx,jpg,jpeg,png,gif,txt,zip,rar', 'Tipos de archivo permitidos'],
+        ['auto_assign_tickets', '0', 'Asignación automática de tickets (0=no, 1=sí)'],
+        ['email_notifications', '1', 'Enviar notificaciones por email (0=no, 1=sí)'],
+        ['ticket_auto_close_days', '30', 'Días para cerrar tickets automáticamente (0=nunca)']
+    ];
+    
+    $config_stmt = $pdo->prepare("INSERT IGNORE INTO system_config (config_key, config_value, description) VALUES (?, ?, ?)");
+    foreach ($default_config as $config_item) {
+        $config_stmt->execute($config_item);
+    }
+    
     echo "✅ Migración completada\n\n";
     
     // PASO 2: Verificar si ya hay datos
