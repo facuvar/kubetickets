@@ -1,11 +1,9 @@
+# Configuración para Railway/PHP Built-in server
+# Este archivo se usa principalmente para Apache local
+
 RewriteEngine On
 
-# Redireccionar a login si no hay sesión
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
-
-# Configuraciones de seguridad
+# Seguridad - Denegar acceso a archivos sensibles
 <Files "*.sql">
     Deny from all
 </Files>
@@ -14,33 +12,30 @@ RewriteRule ^(.*)$ index.php [QSA,L]
     Deny from all
 </Files>
 
-# Habilitar compresión
+<Files "config*.php">
+    Deny from all
+</Files>
+
+# Proteger directorio de base de datos
+<Directory "database/">
+    Deny from all
+</Directory>
+
+# Habilitar compresión (si disponible)
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
     AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
-# Cache control
+# Cache control básico (si disponible)
 <IfModule mod_expires.c>
     ExpiresActive On
     ExpiresByType text/css "access plus 1 month"
     ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/ico "access plus 1 year"
-    ExpiresByType image/icon "access plus 1 year"
-    ExpiresByType text/plain "access plus 1 month"
-    ExpiresByType application/pdf "access plus 1 month"
-</IfModule> 
+    ExpiresByType image/* "access plus 1 year"
+</IfModule>
 
 # Redireccionar a login si no hay sesión
 RewriteCond %{REQUEST_FILENAME} !-f

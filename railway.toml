@@ -4,6 +4,7 @@ builder = "nixpacks"
 [deploy]
 healthcheckPath = "/"
 restartPolicyType = "always"
+startCommand = "php -S 0.0.0.0:$PORT router.php"
 
 [environments.production]
 variables = {} 
