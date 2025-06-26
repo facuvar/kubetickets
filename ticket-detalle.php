@@ -627,7 +627,7 @@ if ($_SESSION['user_role'] === 'admin') {
         <!-- Información del Ticket -->
         <div class="ticket-card">
             <div class="ticket-header">
-                <h3><?php echo htmlspecialchars($ticket['subject']); ?></h3>
+                                        <h3><?php echo htmlspecialchars($ticket['subject'] ?? $ticket['title']); ?></h3>
                 <div style="margin-top: 1rem;">
                     <span class="badge badge-<?php echo strtolower($ticket['status']); ?>">
                         <?php echo ucfirst($ticket['status']); ?>

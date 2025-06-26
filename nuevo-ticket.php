@@ -42,11 +42,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $max_id = $stmt->fetch()['max_id'] ?? 0;
             $ticket_number = $prefix . '-' . str_pad($max_id + 1, 3, '0', STR_PAD_LEFT);
             
-            $stmt = $pdo->prepare("
-                INSERT INTO tickets (ticket_number, subject, description, priority, category, cliente_id) 
-                VALUES (?, ?, ?, ?, ?, ?)
-            ");
-            $stmt->execute([$ticket_number, $subject, $description, $priority, $category, $_SESSION['user_id']]);
+            // Detectar estructura de tabla (Railway vs Localhost)
+            $config_instance = Config::getInstance();
+            if ($config_instance->isRailway()) {
+                // En Railway: usar campo title
+                $stmt = $pdo->prepare("
+                    INSERT INTO tickets (ticket_number, title, subject, description, priority, category, cliente_id) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                ");
+                $stmt->execute([$ticket_number, $subject, $subject, $description, $priority, $category, $_SESSION['user_id']]);
+            } else {
+                // En localhost: usar campo subject
+                $stmt = $pdo->prepare("
+                    INSERT INTO tickets (ticket_number, subject, description, priority, category, cliente_id) 
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ");
+                $stmt->execute([$ticket_number, $subject, $description, $priority, $category, $_SESSION['user_id']]);
+            }
             $ticket_id = $pdo->lastInsertId();
             
             // Procesar archivos adjuntos
