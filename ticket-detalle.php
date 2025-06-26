@@ -740,7 +740,7 @@ if ($_SESSION['user_role'] === 'admin') {
                 <?php foreach ($attachments as $attachment): ?>
                     <div class="attachment">
                         <i class="fas fa-file"></i>
-                        <a href="uploads/tickets/<?php echo htmlspecialchars($attachment['filename']); ?>" 
+                        <a href="serve-file.php?file=<?php echo urlencode($attachment['filename']); ?>" 
                            target="_blank">
                             <?php echo htmlspecialchars($attachment['original_filename']); ?>
                         </a>

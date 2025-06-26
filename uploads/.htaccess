@@ -3,3 +3,36 @@ deny from all
 <Files ~ "\.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip|rar)$">
     allow from all
 </Files>
+
+# Permitir acceso a archivos de uploads
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Permitir acceso directo a imágenes, PDFs y documentos
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|pdf|doc|docx|txt|zip)$ [NC]
+    RewriteRule ^.*$ - [L]
+    
+    # Denegar acceso a archivos PHP en uploads
+    RewriteCond %{REQUEST_URI} \.php$ [NC]
+    RewriteRule ^.*$ - [F]
+</IfModule>
+
+# Configuración de tipos MIME
+<IfModule mod_mime.c>
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png .png
+    AddType image/gif .gif
+    AddType application/pdf .pdf
+    AddType application/msword .doc
+    AddType application/vnd.openxmlformats-officedocument.wordprocessingml.document .docx
+    AddType text/plain .txt
+    AddType application/zip .zip
+</IfModule>
+
+# Headers de seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options nosniff
+    Header set X-Frame-Options DENY
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
