@@ -67,7 +67,10 @@ $stmt = $pdo->query("
         u.name,
         COUNT(t.id) as tickets_asignados,
         COUNT(CASE WHEN t.status = 'cerrado' THEN 1 END) as tickets_resueltos,
-        ROUND(COUNT(CASE WHEN t.status = 'cerrado' THEN 1 END) * 100.0 / COUNT(t.id), 2) as porcentaje_resolucion
+        CASE 
+            WHEN COUNT(t.id) = 0 THEN 0 
+            ELSE ROUND(COUNT(CASE WHEN t.status = 'cerrado' THEN 1 END) * 100.0 / COUNT(t.id), 2) 
+        END as porcentaje_resolucion
     FROM users u
     LEFT JOIN tickets t ON u.id = t.agente_id
     WHERE u.role = 'agente'
@@ -429,7 +432,7 @@ $tiempo_promedio = $stmt->fetch()['promedio'] ?? 0;
                                 <td><?php echo htmlspecialchars($agente['name']); ?></td>
                                 <td><?php echo $agente['tickets_asignados']; ?></td>
                                 <td><?php echo $agente['tickets_resueltos']; ?></td>
-                                <td><?php echo number_format($agente['porcentaje_resolucion'], 2); ?>%</td>
+                                <td><?php echo number_format($agente['porcentaje_resolucion'] ?? 0, 2); ?>%</td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
