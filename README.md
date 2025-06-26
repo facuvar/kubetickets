@@ -1,48 +1,139 @@
 # 🎫 Sistema de Tickets KubeAgency
 
-Sistema completo de gestión de tickets de soporte para KubeAgency, desarrollado en PHP con MySQL. Compatible con **localhost** y **Railway** automáticamente.
+Sistema de gestión de tickets de soporte desarrollado para KubeAgency con diseño moderno y notificaciones automáticas.
 
-## 🚀 Deploy Rápido
+## 🚀 Deploy Dual - Localhost + Railway
 
-### **Opción 1: Localhost (XAMPP)**
+Este sistema está configurado para funcionar automáticamente tanto en **localhost** (XAMPP) como en **Railway** (producción).
+
+### 🖥️ Localhost (XAMPP)
 ```bash
-# 1. Descargar proyecto
-git clone https://github.com/facuvar/kubetickets.git
-cd kubetickets
-
-# 2. Mover a XAMPP
-mv kubetickets C:/xampp/htdocs/sistema-tickets
-
-# 3. Crear base de datos
-php database/migrate.php
-
-# 4. Acceder
+# Acceso directo
 http://localhost/sistema-tickets/
+
+# Base de datos
+Host: localhost
+Database: sistema_tickets_kube
+User: root
+Password: (vacío)
 ```
 
-### **Opción 2: Railway (Nube)**
-```bash
-# 1. Fork este repo en GitHub
-# 2. Crear proyecto en Railway desde GitHub
-# 3. Agregar servicio MySQL en Railway
-# 4. Configurar variables de entorno (ver abajo)
-# 5. ¡Listo! Tu app estará en xxx.up.railway.app
-```
+### ☁️ Railway (Producción)
 
-## ⚙️ Variables de Entorno para Railway
-
+**Variables de entorno requeridas:**
 ```env
-# Base de datos (Railway las genera automáticamente)
-MYSQLHOST=containers-us-west-xxx.railway.app
-MYSQLPORT=6543
+# Base de datos MySQL
+MYSQLHOST=mysql.railway.internal
+MYSQLPORT=3306
 MYSQLDATABASE=railway
 MYSQLUSER=root
-MYSQLPASSWORD=tu_password_generado
+MYSQLPASSWORD=zqhKigXvCNxnmNkRiKaOVnwJeFvqWzIK
 
-# SendGrid (opcional)
-SENDGRID_API_KEY=SG.tu_api_key_aqui
+# SendGrid para emails
+SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxx
 SENDGRID_FROM_EMAIL=info@kubeagency.co
 ```
+
+**Configuración automática:**
+- ✅ Detección automática de entorno
+- ✅ Configuración de base de datos dinámica
+- ✅ Migración automática en Railway
+- ✅ URLs dinámicas para emails
+
+## 📧 Configuración SendGrid
+
+1. Crear cuenta en [SendGrid](https://sendgrid.com/)
+2. Generar API Key con permisos "Mail Send"
+3. Agregar variables en Railway:
+   - `SENDGRID_API_KEY`
+   - `SENDGRID_FROM_EMAIL`
+
+## 🛠️ Características
+
+### ✅ Sistema de Tickets
+- Creación, edición y eliminación de tickets
+- Estados: abierto, proceso, cerrado
+- Prioridades: baja, media, alta, crítica
+- Numeración automática KUBE-XXX
+- Archivos adjuntos
+
+### ✅ Gestión de Usuarios
+- Roles: admin, agente, cliente
+- CRUD completo con validaciones
+- Protección contra eliminación del usuario actual
+
+### ✅ Notificaciones Email
+- Nuevos tickets → Administradores
+- Cambio de estado → Cliente
+- Nuevas respuestas → Cliente
+- Asignación de agente → Agente
+
+### ✅ Interfaz Moderna
+- Tema oscuro profesional
+- Responsive design
+- Efectos de hover y animaciones
+- Fondo con partículas animadas
+
+## 🗄️ Base de Datos
+
+```sql
+-- Tablas principales
+- users (usuarios del sistema)
+- tickets (tickets de soporte)
+- ticket_messages (conversación)
+- ticket_attachments (archivos adjuntos)
+- system_config (configuración)
+```
+
+## 🔐 Credenciales por Defecto
+
+```
+Usuario: admin@kubeagency.co
+Contraseña: admin123
+```
+
+## 📁 Estructura del Proyecto
+
+```
+sistema-tickets/
+├── config.php              # Configuración automática
+├── config_railway.php      # Específico Railway
+├── deploy_railway.php      # Script migración Railway
+├── database/
+│   ├── migrate.php         # Migración completa
+│   └── setup.php          # Configuración inicial
+├── includes/
+│   └── email.php          # Sistema de emails
+├── uploads/               # Archivos subidos
+│   ├── tickets/          # Adjuntos de tickets
+│   └── avatars/          # Avatares de usuarios
+└── *.php                 # Páginas del sistema
+```
+
+## 🚀 Instrucciones de Deploy
+
+### Localhost (XAMPP)
+1. Clonar en `C:/xampp/htdocs/`
+2. Crear base de datos `sistema_tickets_kube`
+3. Acceder a `http://localhost/sistema-tickets/`
+
+### Railway
+1. Conectar repositorio GitHub
+2. Crear servicio MySQL
+3. Agregar variables de entorno
+4. Deploy automático
+
+## 🔧 Tecnologías
+
+- **Backend**: PHP 8.2+ (vanilla)
+- **Base de datos**: MySQL
+- **Email**: SendGrid API
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Deploy**: Railway + GitHub
+
+## 📝 Licencia
+
+MIT License - KubeAgency 2025
 
 ## ✨ Características Principales
 
@@ -99,58 +190,6 @@ SENDGRID_FROM_EMAIL=info@kubeagency.co
 - **Deploy**: Railway + GitHub
 - **Iconos**: Font Awesome 6
 - **Tipografía**: Inter (Google Fonts)
-
-## 📂 Estructura del Proyecto
-
-```
-kubetickets/
-├── 🔧 config.php              # Configuración automática (localhost/Railway)
-├── 🗄️ database/
-│   ├── migrate.php            # Migración automática
-│   └── setup.php             # Setup inicial
-├── 📧 includes/
-│   └── email.php             # Servicio de notificaciones (URLs dinámicas)
-├── 📁 uploads/
-│   ├── tickets/              # Archivos adjuntos
-│   └── avatars/              # Fotos de perfil
-├── 🏠 index.php              # Dashboard principal
-├── 🔐 login.php              # Autenticación
-├── ➕ nuevo-ticket.php       # Formulario moderno de tickets
-├── 📋 tickets.php            # Lista de tickets (admin) + eliminación
-├── 🎫 ticket-detalle.php     # Vista detallada de ticket
-├── 📝 mis-tickets.php        # Tickets del cliente
-├── 👥 usuarios.php           # Gestión completa de usuarios
-├── ⚙️ configuracion.php      # Configuración del sistema
-├── 📊 reportes.php           # Reportes y estadísticas
-├── 🚀 railway.toml           # Configuración Railway
-├── 📦 nixpacks.toml          # Configuración Nixpacks
-├── 🚀 deploy.bat             # Script de deploy Windows
-└── 📖 README.md              # Esta documentación
-```
-
-## 🚀 Configuración Dual (Localhost + Railway)
-
-El sistema **detecta automáticamente** el entorno y se configura solo:
-
-### **🏠 Localhost**
-```php
-// Se detecta automáticamente
-$config = [
-    'environment' => 'localhost',
-    'db_host' => 'localhost',
-    'base_url' => 'http://localhost/sistema-tickets'
-];
-```
-
-### **☁️ Railway**
-```php
-// Se detecta automáticamente por variables de entorno
-$config = [
-    'environment' => 'railway',
-    'db_host' => getenv('MYSQLHOST'),
-    'base_url' => getenv('RAILWAY_STATIC_URL')
-];
-```
 
 ## 📋 Checklist Post-Deploy
 
