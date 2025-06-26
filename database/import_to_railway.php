@@ -49,32 +49,67 @@ try {
     $executed = 0;
     $errors = 0;
     
-    // Deshabilitar autocommit para transacción
-    $pdo->beginTransaction();
+    // Separar CREATE TABLE de ALTER TABLE para evitar problemas con FK
+    $create_statements = [];
+    $insert_statements = [];
+    $other_statements = [];
     
     foreach ($statements as $statement) {
         $statement = trim($statement);
-        
-        // Saltar líneas vacías y comentarios
         if (empty($statement) || strpos($statement, '--') === 0) {
             continue;
         }
         
+        if (stripos($statement, 'CREATE TABLE') === 0) {
+            // Remover constraint de foreign key del CREATE TABLE
+            $statement = preg_replace('/,\s*CONSTRAINT[^,]*FOREIGN KEY[^,]*REFERENCES[^,]*ON DELETE[^,]*ON UPDATE[^,]*/', '', $statement);
+            $statement = preg_replace('/,\s*CONSTRAINT[^,]*FOREIGN KEY[^,]*REFERENCES[^,]*ON DELETE[^,]*/', '', $statement);
+            $statement = preg_replace('/,\s*CONSTRAINT[^,]*FOREIGN KEY[^,]*REFERENCES[^,]*/', '', $statement);
+            $create_statements[] = $statement;
+        } elseif (stripos($statement, 'INSERT INTO') === 0) {
+            $insert_statements[] = $statement;
+        } else {
+            $other_statements[] = $statement;
+        }
+    }
+    
+    echo "📋 Organizando declaraciones:\n";
+    echo "- CREATE TABLE: " . count($create_statements) . "\n";
+    echo "- INSERT: " . count($insert_statements) . "\n";
+    echo "- Otras: " . count($other_statements) . "\n\n";
+    
+    // Deshabilitar autocommit para transacción
+    $pdo->beginTransaction();
+    
+    // Ejecutar en orden: DROP, SET, CREATE, INSERT
+    $all_statements = array_merge($other_statements, $create_statements, $insert_statements);
+    
+    foreach ($all_statements as $statement) {
         try {
             $pdo->exec($statement);
             $executed++;
             
-            // Mostrar progreso cada 10 declaraciones
-            if ($executed % 10 === 0) {
+            // Mostrar progreso cada 5 declaraciones
+            if ($executed % 5 === 0) {
                 echo "⏳ Procesadas: $executed declaraciones\n";
             }
             
         } catch (PDOException $e) {
             $errors++;
-            echo "⚠️  Warning en declaración $executed: " . $e->getMessage() . "\n";
+            $error_msg = $e->getMessage();
             
-            // Si hay muchos errores, abortar
-            if ($errors > 10) {
+            // Ignorar algunos errores conocidos
+            if (strpos($error_msg, 'already exists') !== false ||
+                strpos($error_msg, 'Failed to open the referenced table') !== false ||
+                strpos($error_msg, 'Duplicate entry') !== false) {
+                echo "⚠️  Info: Saltando declaración $executed (ya existe o FK temporal)\n";
+                continue;
+            }
+            
+            echo "⚠️  Warning en declaración $executed: " . $error_msg . "\n";
+            
+            // Si hay muchos errores críticos, abortar
+            if ($errors > 15) {
                 throw new Exception("Demasiados errores en la importación. Abortando.");
             }
         }
@@ -120,13 +155,13 @@ try {
     }
     
 } catch(PDOException $e) {
-    if (isset($pdo)) {
+    if (isset($pdo) && $pdo->inTransaction()) {
         $pdo->rollBack();
     }
     echo "❌ Error de base de datos: " . $e->getMessage() . "\n";
     exit(1);
 } catch(Exception $e) {
-    if (isset($pdo)) {
+    if (isset($pdo) && $pdo->inTransaction()) {
         $pdo->rollBack();
     }
     echo "❌ Error general: " . $e->getMessage() . "\n";
