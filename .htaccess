@@ -1,6 +1,4 @@
-# Configuración para Railway/PHP Built-in server
-# Este archivo se usa principalmente para Apache local
-
+# Configuración para Apache/XAMPP
 RewriteEngine On
 
 # Seguridad - Denegar acceso a archivos sensibles
@@ -16,10 +14,9 @@ RewriteEngine On
     Deny from all
 </Files>
 
-# Proteger directorio de base de datos
-<Directory "database/">
+<Files "deploy*.php">
     Deny from all
-</Directory>
+</Files>
 
 # Habilitar compresión (si disponible)
 <IfModule mod_deflate.c>
@@ -27,6 +24,7 @@ RewriteEngine On
     AddOutputFilterByType DEFLATE text/html
     AddOutputFilterByType DEFLATE text/css
     AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
 </IfModule>
 
 # Cache control básico (si disponible)
@@ -37,44 +35,5 @@ RewriteEngine On
     ExpiresByType image/* "access plus 1 year"
 </IfModule>
 
-# Redireccionar a login si no hay sesión
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
-
-# Configuraciones de seguridad
-<Files "*.sql">
-    Deny from all
-</Files>
-
-<Files "*.log">
-    Deny from all
-</Files>
-
-# Habilitar compresión
-<IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/plain
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/xml
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE application/xhtml+xml
-    AddOutputFilterByType DEFLATE application/rss+xml
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
-</IfModule>
-
-# Cache control
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/ico "access plus 1 year"
-    ExpiresByType image/icon "access plus 1 year"
-    ExpiresByType text/plain "access plus 1 month"
-    ExpiresByType application/pdf "access plus 1 month"
-</IfModule> 
+# Redirección por defecto
+DirectoryIndex index.php index.html 
