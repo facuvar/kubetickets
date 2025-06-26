@@ -2,6 +2,12 @@
 configuracion.php
 config_local.php
 
+# Archivos de framework que no usamos
+composer.json
+composer.lock
+artisan
+vendor/
+
 # Archivos temporales
 *.tmp
 *.temp
