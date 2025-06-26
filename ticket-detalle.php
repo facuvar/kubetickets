@@ -137,7 +137,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $file_path = $upload_dir . $unique_filename;
                                 
                                 if (move_uploaded_file($_FILES['attachments']['tmp_name'][$key], $file_path)) {
+                                    // Insertar con compatibilidad Railway vs Localhost
+                                $config_instance = Config::getInstance();
+                                if ($config_instance->isRailway()) {
+                                    // En Railway: incluir campo file_path
+                                    $stmt = $pdo->prepare("INSERT INTO ticket_attachments (ticket_id, message_id, filename, original_filename, file_path, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                                } else {
+                                    // En localhost: sin campo file_path
                                     $stmt = $pdo->prepare("INSERT INTO ticket_attachments (ticket_id, message_id, filename, original_filename, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                                }
+                                
+                                // Ejecutar con parámetros apropiados
+                                if ($config_instance->isRailway()) {
+                                    $stmt->execute([
+                                        $ticket_id, 
+                                        $response_id, 
+                                        $unique_filename, 
+                                        $filename, 
+                                        $file_path,
+                                        $_FILES['attachments']['size'][$key], 
+                                        $file_extension, 
+                                        $_SESSION['user_id']
+                                    ]);
+                                } else {
                                     $stmt->execute([
                                         $ticket_id, 
                                         $response_id, 
@@ -147,6 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         $file_extension, 
                                         $_SESSION['user_id']
                                     ]);
+                                }
                                 }
                             }
                         }

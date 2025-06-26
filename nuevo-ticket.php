@@ -80,15 +80,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $file_path = $upload_dir . $unique_filename;
                             
                             if (move_uploaded_file($_FILES['attachments']['tmp_name'][$key], $file_path)) {
-                                $stmt = $pdo->prepare("INSERT INTO ticket_attachments (ticket_id, filename, original_filename, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)");
-                                $stmt->execute([
-                                    $ticket_id, 
-                                    $unique_filename, 
-                                    $filename, 
-                                    $_FILES['attachments']['size'][$key], 
-                                    $file_extension, 
-                                    $_SESSION['user_id']
-                                ]);
+                                // Insertar con compatibilidad Railway vs Localhost
+                                if ($config_instance->isRailway()) {
+                                    // En Railway: incluir campo file_path
+                                    $stmt = $pdo->prepare("INSERT INTO ticket_attachments (ticket_id, filename, original_filename, file_path, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                                    $stmt->execute([
+                                        $ticket_id, 
+                                        $unique_filename, 
+                                        $filename, 
+                                        $file_path,
+                                        $_FILES['attachments']['size'][$key], 
+                                        $file_extension, 
+                                        $_SESSION['user_id']
+                                    ]);
+                                } else {
+                                    // En localhost: sin campo file_path
+                                    $stmt = $pdo->prepare("INSERT INTO ticket_attachments (ticket_id, filename, original_filename, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)");
+                                    $stmt->execute([
+                                        $ticket_id, 
+                                        $unique_filename, 
+                                        $filename, 
+                                        $_FILES['attachments']['size'][$key], 
+                                        $file_extension, 
+                                        $_SESSION['user_id']
+                                    ]);
+                                }
                             }
                         }
                     }
