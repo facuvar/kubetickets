@@ -755,6 +755,10 @@ if ($user_role === 'cliente') {
                         <i class="fas fa-chart-line"></i>
                         <span>Reportes</span>
                     </a>
+                    <a href="gestionar-archivos.php" class="quick-btn">
+                        <i class="fas fa-hdd"></i>
+                        <span>Archivos Adjuntos</span>
+                    </a>
                     <a href="configuracion.php" class="quick-btn">
                         <i class="fas fa-cog"></i>
                         <span>Configuración</span>
