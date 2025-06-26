@@ -1,0 +1,9 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+healthcheckPath = "/"
+restartPolicyType = "always"
+
+[environments.production]
+variables = {} 

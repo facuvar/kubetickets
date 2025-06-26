@@ -1,0 +1,48 @@
+# Archivos de configuración local
+configuracion.php
+config_local.php
+
+# Archivos temporales
+*.tmp
+*.temp
+check_*.php
+
+# Archivos de logs
+*.log
+error.log
+access.log
+
+# Archivos de base de datos local
+*.sql
+*.db
+*.sqlite
+
+# Directorios de uploads (mantener estructura pero no archivos)
+uploads/tickets/*
+uploads/avatars/*
+!uploads/tickets/.gitkeep
+!uploads/avatars/.gitkeep
+
+# Variables de entorno locales
+.env
+.env.local
+
+# Cache y temporales de PHP
+*.cache
+opcache/
+temp/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backups
+*.bak
+*.backup 
