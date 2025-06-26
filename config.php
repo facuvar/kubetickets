@@ -161,4 +161,3 @@ function isLocalhost() {
 function isRailway() {
     return Config::getInstance()->isRailway();
 }
-?> 
