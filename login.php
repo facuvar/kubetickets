@@ -178,47 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 12px;
         }
 
-        .demo-info {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: rgba(56, 178, 172, 0.05);
-            border: 1px solid rgba(56, 178, 172, 0.2);
-            border-radius: 6px;
-        }
 
-        .demo-info h4 {
-            color: #f7fafc;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.75rem;
-        }
-
-        .demo-info p {
-            margin-bottom: 0.5rem;
-            font-size: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .demo-info p:last-child {
-            margin-bottom: 0;
-        }
-
-        .demo-role {
-            font-weight: 500;
-            color: #4fd1c7;
-        }
-
-        .demo-info code {
-            background: rgba(26, 32, 44, 0.8);
-            padding: 0.125rem 0.375rem;
-            border-radius: 3px;
-            font-size: 0.625rem;
-            font-family: 'Monaco', 'Menlo', monospace;
-            color: #cbd5e0;
-            border: 1px solid #4a5568;
-        }
     </style>
 </head>
 <body>
@@ -271,21 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </button>
         </form>
 
-        <div class="demo-info">
-            <h4><i class="fas fa-info-circle"></i> Credenciales Demo</h4>
-            <p>
-                <span><span class="demo-role">Admin</span> <code>admin@kubeagency.co</code></span>
-                <code>admin123</code>
-            </p>
-            <p>
-                <span><span class="demo-role">Agente</span> <code>agente@kubeagency.co</code></span>
-                <code>agente123</code>
-            </p>
-            <p>
-                <span><span class="demo-role">Cliente</span> <code>cliente@kubeagency.co</code></span>
-                <code>cliente123</code>
-            </p>
-        </div>
+
     </div>
 </body>
 </html> 
