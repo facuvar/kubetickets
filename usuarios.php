@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($existing_user) {
                     $error = 'Ya existe un usuario con ese email';
                 } else {
-                    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, company) VALUES (?, ?, ?, ?, ?)");
-                    $stmt->execute([$name, $email, password_hash($user_password, PASSWORD_DEFAULT), $role, $company]);
-                    $message = 'Usuario creado exitosamente';
+                $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, company) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$name, $email, password_hash($user_password, PASSWORD_DEFAULT), $role, $company]);
+                $message = 'Usuario creado exitosamente';
                 }
             } catch(PDOException $e) {
                 $error = 'Error al crear usuario: ' . $e->getMessage();

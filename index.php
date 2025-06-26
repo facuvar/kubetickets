@@ -530,15 +530,15 @@ if ($user_role === 'cliente') {
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+                gap: 0.5rem;
             font-size: 0.75rem;
             border: 1px solid rgba(74, 85, 104, 0.3);
             background: rgba(45, 55, 72, 0.6);
             color: #cbd5e0;
             backdrop-filter: blur(5px);
             min-width: 120px;
-            justify-content: center;
-        }
+                justify-content: center;
+            }
 
         .quick-btn:hover {
             transform: translateY(-1px);
@@ -627,26 +627,26 @@ if ($user_role === 'cliente') {
         }
 
         @media (max-width: 1024px) {
-            .charts-section {
+        .charts-section {
                 grid-template-columns: 1fr;
-            }
-            
-            .activity-section {
+        }
+
+        .activity-section {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 1rem;
+            padding: 1rem;
             }
             
             .dashboard-title {
-                font-size: 2rem;
+            font-size: 2rem;
             }
             
             .quick-actions {
-                gap: 0.5rem;
+            gap: 0.5rem;
                 padding: 0.75rem;
             }
             
@@ -671,13 +671,13 @@ if ($user_role === 'cliente') {
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
-            }
-            
+        }
+
             .user-info {
                 order: -1;
             }
-        }
-
+            }
+            
         @media (max-width: 480px) {
             .stats-grid {
                 grid-template-columns: 1fr;
@@ -704,8 +704,8 @@ if ($user_role === 'cliente') {
                 <div class="user-details">
                     <div class="user-name"><?php echo htmlspecialchars($_SESSION['user_name'] ?? 'Usuario'); ?></div>
                     <div class="user-role"><?php echo strtoupper($user_role); ?></div>
-                </div>
-            </div>
+                    </div>
+                    </div>
             
             <div class="header-actions">
                 <?php if ($user_role === 'cliente'): ?>
@@ -737,7 +737,7 @@ if ($user_role === 'cliente') {
                     Sistema de gestión de tickets de soporte
                 <?php endif; ?>
             </p>
-        </div>
+    </div>
 
         <!-- Acciones rápidas -->
         <div class="quick-actions">
@@ -785,22 +785,22 @@ if ($user_role === 'cliente') {
                 <div class="stat-number"><?php echo $stats['tickets_abiertos']; ?></div>
                 <div class="stat-label">
                     <?php echo $user_role === 'cliente' ? 'Mis Tickets Abiertos' : 'Tickets Abiertos'; ?>
-                </div>
+                    </div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-number"><?php echo $stats['tickets_proceso']; ?></div>
                 <div class="stat-label">
                     <?php echo $user_role === 'cliente' ? 'Mis Tickets en Proceso' : 'Tickets en Proceso'; ?>
-                </div>
+                    </div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-number"><?php echo $stats['tickets_cerrados']; ?></div>
                 <div class="stat-label">
                     <?php echo $user_role === 'cliente' ? 'Mis Tickets Resueltos' : 'Tickets Resueltos'; ?>
+                    </div>
                 </div>
-            </div>
             
             <div class="stat-card">
                 <div class="stat-number"><?php echo $stats['total']; ?></div>

@@ -139,7 +139,7 @@ $tiempo_promedio = $stmt->fetch()['promedio'] ?? 0;
             border-bottom: 1px solid #4a5568;
             font-size: 12px;
         }
-        
+
         .header a { 
             color: white; 
             text-decoration: none; 
@@ -161,7 +161,7 @@ $tiempo_promedio = $stmt->fetch()['promedio'] ?? 0;
             font-family: inherit;
             font-size: 11px;
         }
-        
+
         .btn:hover {
             background: #4b5563;
         }
@@ -308,7 +308,7 @@ $tiempo_promedio = $stmt->fetch()['promedio'] ?? 0;
 
         @media (max-width: 768px) {
             .container {
-                padding: 1rem;
+            padding: 1rem;
             }
             
             .stats-grid {
@@ -370,7 +370,7 @@ $tiempo_promedio = $stmt->fetch()['promedio'] ?? 0;
                     <canvas id="estadosChart"></canvas>
                 </div>
             </div>
-            
+
             <div class="chart-card">
                 <div class="chart-title">
                     <i class="fas fa-chart-bar"></i>
@@ -481,7 +481,7 @@ $tiempo_promedio = $stmt->fetch()['promedio'] ?? 0;
             type: 'bar',
             data: {
                 labels: [<?php foreach ($tickets_por_prioridad as $prioridad): ?>'<?php echo ucfirst($prioridad['priority']); ?>',<?php endforeach; ?>],
-                datasets: [{
+            datasets: [{
                     label: 'Tickets',
                     data: [<?php foreach ($tickets_por_prioridad as $prioridad): ?><?php echo $prioridad['count']; ?>,<?php endforeach; ?>],
                     backgroundColor: [

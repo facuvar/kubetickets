@@ -7,7 +7,7 @@ Sistema de gestión de tickets de soporte desarrollado para KubeAgency con dise�
 Este sistema está configurado para funcionar automáticamente tanto en **localhost** (XAMPP) como en **Railway** (producción).
 
 ### 🖥️ Localhost (XAMPP)
-```bash
+   ```bash
 # Acceso directo
 http://localhost/sistema-tickets/
 

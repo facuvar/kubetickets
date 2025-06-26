@@ -53,11 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$ticket_number, $subject, $subject, $description, $priority, $category, $_SESSION['user_id']]);
             } else {
                 // En localhost: usar campo subject
-                $stmt = $pdo->prepare("
-                    INSERT INTO tickets (ticket_number, subject, description, priority, category, cliente_id) 
-                    VALUES (?, ?, ?, ?, ?, ?)
-                ");
-                $stmt->execute([$ticket_number, $subject, $description, $priority, $category, $_SESSION['user_id']]);
+            $stmt = $pdo->prepare("
+                INSERT INTO tickets (ticket_number, subject, description, priority, category, cliente_id) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+            $stmt->execute([$ticket_number, $subject, $description, $priority, $category, $_SESSION['user_id']]);
             }
             $ticket_id = $pdo->lastInsertId();
             
@@ -95,15 +95,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     ]);
                                 } else {
                                     // En localhost: sin campo file_path
-                                    $stmt = $pdo->prepare("INSERT INTO ticket_attachments (ticket_id, filename, original_filename, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)");
-                                    $stmt->execute([
-                                        $ticket_id, 
-                                        $unique_filename, 
-                                        $filename, 
-                                        $_FILES['attachments']['size'][$key], 
-                                        $file_extension, 
-                                        $_SESSION['user_id']
-                                    ]);
+                                $stmt = $pdo->prepare("INSERT INTO ticket_attachments (ticket_id, filename, original_filename, file_size, file_type, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)");
+                                $stmt->execute([
+                                    $ticket_id, 
+                                    $unique_filename, 
+                                    $filename, 
+                                    $_FILES['attachments']['size'][$key], 
+                                    $file_extension, 
+                                    $_SESSION['user_id']
+                                ]);
                                 }
                             }
                         }
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         .header a { 
             color: white; 
-            text-decoration: none;
+            text-decoration: none; 
             transition: color 0.3s ease;
         }
 
@@ -491,7 +491,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .priority-media { border-left: 4px solid #3b82f6; }
         .priority-alta { border-left: 4px solid #f59e0b; }
         .priority-critica { border-left: 4px solid #ef4444; }
-
+        
         .file-upload-area {
             border: 2px dashed rgba(74, 85, 104, 0.6);
             border-radius: 8px;
@@ -531,11 +531,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         @media (max-width: 768px) {
-            .container { 
-                padding: 1rem; 
-            }
-            
-            .form-card {
+        .container {
+            padding: 1rem;
+        }
+
+        .form-card {
                 padding: 1.5rem;
             }
             
@@ -544,7 +544,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             .btn {
-                width: 100%;
+            width: 100%;
             }
             
             .card-header h3 {
@@ -608,129 +608,129 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h3>
                     <i class="fas fa-plus-circle"></i> 
                     Nuevo Ticket de Soporte
-                </h3>
+            </h3>
                 <p>Complete el formulario para reportar un problema o solicitar ayuda</p>
             </div>
             
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label for="subject">
+                <div class="form-group">
+                    <label for="subject">
                             <i class="fas fa-edit"></i>
-                            Asunto del Ticket <span class="required">*</span>
-                        </label>
-                        <input 
-                            type="text" 
-                            id="subject" 
-                            name="subject" 
+                        Asunto del Ticket <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="subject" 
+                        name="subject" 
                             placeholder="Ej: Error al cargar la página de reportes"
-                            value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>"
-                            required
-                            maxlength="255"
-                        >
-                        <div class="help-text">
+                        value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>"
+                        required
+                        maxlength="255"
+                    >
+                    <div class="help-text">
                             <i class="fas fa-info-circle"></i>
-                            Escriba un título claro y descriptivo del problema o solicitud
-                        </div>
+                        Escriba un título claro y descriptivo del problema o solicitud
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="category">
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">
                             <i class="fas fa-tags"></i>
-                            Categoría
-                        </label>
-                        <select id="category" name="category">
-                            <option value="">Seleccionar categoría</option>
+                        Categoría
+                    </label>
+                    <select id="category" name="category">
+                        <option value="">Seleccionar categoría</option>
                             <option value="tecnico" <?php echo ($_POST['category'] ?? '') === 'tecnico' ? 'selected' : ''; ?>>🔧 Soporte Técnico</option>
                             <option value="cuenta" <?php echo ($_POST['category'] ?? '') === 'cuenta' ? 'selected' : ''; ?>>👤 Problema de Cuenta</option>
                             <option value="facturacion" <?php echo ($_POST['category'] ?? '') === 'facturacion' ? 'selected' : ''; ?>>💳 Facturación</option>
                             <option value="funcionalidad" <?php echo ($_POST['category'] ?? '') === 'funcionalidad' ? 'selected' : ''; ?>>✨ Nueva Funcionalidad</option>
                             <option value="general" <?php echo ($_POST['category'] ?? '') === 'general' ? 'selected' : ''; ?>>💬 Consulta General</option>
-                        </select>
+                    </select>
                         <div class="category-grid">
                             <div class="category-hint">🔧 Técnico</div>
                             <div class="category-hint">👤 Cuenta</div>
                             <div class="category-hint">💳 Facturación</div>
                             <div class="category-hint">✨ Funcionalidad</div>
                             <div class="category-hint">💬 General</div>
-                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="priority">
+                </div>
+                
+                <div class="form-group">
+                    <label for="priority">
                             <i class="fas fa-exclamation-triangle"></i>
-                            Prioridad <span class="required">*</span>
-                        </label>
-                        <select id="priority" name="priority" required>
-                            <option value="baja" <?php echo ($_POST['priority'] ?? '') === 'baja' ? 'selected' : ''; ?>>
+                        Prioridad <span class="required">*</span>
+                    </label>
+                    <select id="priority" name="priority" required>
+                        <option value="baja" <?php echo ($_POST['priority'] ?? '') === 'baja' ? 'selected' : ''; ?>>
                                 🟢 Baja - Consulta general
-                            </option>
-                            <option value="media" <?php echo ($_POST['priority'] ?? 'media') === 'media' ? 'selected' : ''; ?>>
+                        </option>
+                        <option value="media" <?php echo ($_POST['priority'] ?? 'media') === 'media' ? 'selected' : ''; ?>>
                                 🟡 Media - Problema que no bloquea trabajo
-                            </option>
-                            <option value="alta" <?php echo ($_POST['priority'] ?? '') === 'alta' ? 'selected' : ''; ?>>
+                        </option>
+                        <option value="alta" <?php echo ($_POST['priority'] ?? '') === 'alta' ? 'selected' : ''; ?>>
                                 🟠 Alta - Problema que impacta trabajo
-                            </option>
-                            <option value="critica" <?php echo ($_POST['priority'] ?? '') === 'critica' ? 'selected' : ''; ?>>
+                        </option>
+                        <option value="critica" <?php echo ($_POST['priority'] ?? '') === 'critica' ? 'selected' : ''; ?>>
                                 🔴 Crítica - Sistema fuera de servicio
-                            </option>
-                        </select>
-                        
-                        <div class="priority-info">
-                            <div class="priority-item priority-baja">
+                        </option>
+                    </select>
+                    
+                    <div class="priority-info">
+                        <div class="priority-item priority-baja">
                                 <strong>🟢 Baja:</strong> Consultas, dudas generales
-                            </div>
-                            <div class="priority-item priority-media">
+                        </div>
+                        <div class="priority-item priority-media">
                                 <strong>🟡 Media:</strong> Problemas menores
-                            </div>
-                            <div class="priority-item priority-alta">
+                        </div>
+                        <div class="priority-item priority-alta">
                                 <strong>🟠 Alta:</strong> Impacta productividad
-                            </div>
-                            <div class="priority-item priority-critica">
+                        </div>
+                        <div class="priority-item priority-critica">
                                 <strong>🔴 Crítica:</strong> Sistema crítico
-                            </div>
                         </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="description">
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">
                             <i class="fas fa-file-alt"></i>
-                            Descripción Detallada <span class="required">*</span>
-                        </label>
-                        <textarea 
-                            id="description" 
-                            name="description" 
-                            placeholder="Describa detalladamente el problema, incluyendo:
+                        Descripción Detallada <span class="required">*</span>
+                    </label>
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        placeholder="Describa detalladamente el problema, incluyendo:
 • ¿Qué estaba haciendo cuando ocurrió?
 • ¿Qué mensaje de error apareció (si aplica)?
 • ¿Desde cuándo está ocurriendo?
 • ¿Ha intentado alguna solución?
 • Pasos para reproducir el problema"
-                            required
-                        ><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
-                        <div class="help-text">
+                        required
+                    ><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
+                    <div class="help-text">
                             <i class="fas fa-lightbulb"></i>
-                            Proporcione la mayor cantidad de detalles posibles para una resolución más rápida
-                        </div>
+                        Proporcione la mayor cantidad de detalles posibles para una resolución más rápida
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="attachments">
+                </div>
+                
+                <div class="form-group">
+                    <label for="attachments">
                             <i class="fas fa-paperclip"></i>
-                            Archivos Adjuntos
-                        </label>
+                        Archivos Adjuntos
+                    </label>
                         <div class="file-upload-area">
                             <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #4fd1c7; margin-bottom: 0.5rem;"></i>
                             <p>Arrastre archivos aquí o haga clic para seleccionar</p>
-                            <input 
-                                type="file" 
-                                id="attachments" 
-                                name="attachments[]" 
-                                multiple 
-                                accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip"
-                            >
+                    <input 
+                        type="file" 
+                        id="attachments" 
+                        name="attachments[]" 
+                        multiple 
+                        accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip"
+                    >
                         </div>
-                        <div class="help-text">
+                    <div class="help-text">
                             <i class="fas fa-info-circle"></i>
                             Capturas de pantalla, documentos o archivos relevantes.<br>
                             <strong>Tamaño máximo:</strong> <?php echo $config['max_file_size'] ?? 10; ?>MB por archivo | 
