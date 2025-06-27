@@ -728,16 +728,10 @@ if ($user_role === 'cliente') {
     </header>
 
     <div class="container">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Centro de Control</h1>
-            <p class="dashboard-subtitle">
-                <?php if ($user_role === 'cliente'): ?>
-                    Panel de control de tickets - Vista de cliente
-                <?php else: ?>
-                    Sistema de gestión de tickets de soporte
-                <?php endif; ?>
-            </p>
-    </div>
+                <div class="dashboard-header">
+            <h1 class="dashboard-title">Dashboard</h1>
+            <p class="dashboard-subtitle">Panel de control de tickets</p>
+        </div>
 
         <!-- Acciones rápidas -->
         <div class="quick-actions">
