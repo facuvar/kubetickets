@@ -43,9 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($cliente_id) && !empty($subject) && !empty($description)) {
         try {
             // Generar número de ticket
-            $stmt = $pdo->query("SELECT COUNT(*) as count FROM tickets");
-            $count = $stmt->fetch()['count'];
-            $ticket_number = 'KUBE-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+            $prefix = $config['ticket_prefix'] ?? 'KUBE';
+            $stmt = $pdo->query("SELECT MAX(id) as max_id FROM tickets");
+            $max_id = $stmt->fetch()['max_id'] ?? 0;
+            $ticket_number = $prefix . '-' . str_pad($max_id + 1, 3, '0', STR_PAD_LEFT);
             
             // Insertar ticket (detectar estructura de tabla Railway vs Localhost)
             $config_instance = Config::getInstance();
