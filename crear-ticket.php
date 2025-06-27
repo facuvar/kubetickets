@@ -476,7 +476,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="baja" <?php echo (($_POST['priority'] ?? 'media') === 'baja') ? 'selected' : ''; ?>>Baja</option>
                             <option value="media" <?php echo (($_POST['priority'] ?? 'media') === 'media') ? 'selected' : ''; ?>>Media</option>
                             <option value="alta" <?php echo (($_POST['priority'] ?? 'media') === 'alta') ? 'selected' : ''; ?>>Alta</option>
-                            <option value="urgente" <?php echo (($_POST['priority'] ?? 'media') === 'urgente') ? 'selected' : ''; ?>>Urgente</option>
+                            <option value="critica" <?php echo (($_POST['priority'] ?? 'media') === 'critica') ? 'selected' : ''; ?>>Crítica</option>
                         </select>
                     </div>
 
