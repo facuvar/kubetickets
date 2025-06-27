@@ -342,6 +342,64 @@ class EmailService {
         }
     }
     
+    // Notificar nuevo ticket al cliente
+    public function notifyNewTicketToClient($ticket_data) {
+        $subject = "[Nuevo Ticket] {$ticket_data['ticket_number']} - Su ticket ha sido creado";
+        
+        $content = "
+            <p style='font-size: 16px; margin-bottom: 24px;'>
+                🎫 Hemos recibido su solicitud de soporte y hemos creado un ticket para atender su caso.
+            </p>
+            
+            <div class='ticket-card'>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>📋 Número de Ticket:</span>
+                    <span class='ticket-value'><strong>{$ticket_data['ticket_number']}</strong></span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>📝 Asunto:</span>
+                    <span class='ticket-value'>{$ticket_data['subject']}</span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>⚡ Prioridad:</span>
+                    <span class='ticket-value priority-{$ticket_data['priority']}'>
+                        🔥 " . strtoupper($ticket_data['priority']) . "
+                    </span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>🏷️ Categoría:</span>
+                    <span class='ticket-value'>" . ucfirst($ticket_data['category']) . "</span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>📅 Fecha de Creación:</span>
+                    <span class='ticket-value'>" . date('d/m/Y H:i', strtotime($ticket_data['created_at'])) . "</span>
+                </div>
+            </div>
+            
+            <h3 style='color: #3182ce; margin: 24px 0 12px 0; font-size: 18px;'>📄 Descripción del Problema:</h3>
+            <div class='description-box'>" . nl2br(htmlspecialchars($ticket_data['description'])) . "</div>
+            
+            <div style='background: #e6fffa; border: 1px solid #38b2ac; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center;'>
+                <h3 style='color: #2c7a7b; margin: 0 0 8px 0; font-size: 16px;'>
+                    ⏰ ¿Qué sigue?
+                </h3>
+                <p style='margin: 0; font-size: 15px; color: #2d3748;'>
+                    Nuestro equipo de soporte revisará su caso y le responderemos a la brevedad. Mantenga este número de ticket para futuras referencias.
+                </p>
+            </div>
+            
+            <div style='text-align: center; margin: 32px 0;'>
+                <a href='{$this->base_url}/ticket-detalle.php?id={$ticket_data['id']}' class='button'>
+                    🔍 Ver Mi Ticket
+                </a>
+            </div>
+        ";
+        
+        $body = $this->getEmailTemplate("🎫 Ticket Creado Exitosamente", $content, $ticket_data['ticket_number']);
+        
+        return $this->sendEmail($ticket_data['cliente_email'], $subject, $body);
+    }
+    
     // Notificar cambio de estado al cliente
     public function notifyStatusChange($ticket_data, $old_status, $new_status, $changed_by) {
         $subject = "[Actualización] {$ticket_data['ticket_number']} - Estado cambiado a " . ucfirst($new_status);

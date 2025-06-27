@@ -740,6 +740,10 @@ if ($user_role === 'cliente') {
                     <i class="fas fa-list-ul"></i>
                     <span>Gestionar Tickets</span>
                 </a>
+                <a href="crear-ticket.php" class="quick-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Crear Ticket</span>
+                </a>
                 <?php if ($user_role === 'admin'): ?>
                     <a href="usuarios.php" class="quick-btn">
                         <i class="fas fa-users-cog"></i>
