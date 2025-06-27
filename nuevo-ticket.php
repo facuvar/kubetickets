@@ -579,7 +579,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="header">
         <div><a href="index.php"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a></div>
-        <h2><i class="fas fa-microchip"></i> KubeAgency Control - Nuevo Ticket</h2>
+        <h2><i class="fas fa-headset"></i> KUBE Soporte - Nuevo Ticket</h2>
         <div>
             <a href="mis-tickets.php" class="btn btn-secondary" style="margin-right: 1rem;">
                 <i class="fas fa-list"></i> Mis Tickets

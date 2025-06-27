@@ -693,8 +693,8 @@ if ($user_role === 'cliente') {
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <i class="fas fa-microchip"></i>
-                KubeAgency Control
+                <i class="fas fa-headset"></i>
+                KUBE Soporte
             </div>
             
             <div class="user-info">

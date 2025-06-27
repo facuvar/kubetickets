@@ -458,7 +458,7 @@ foreach ($fs_files as $file) {
                 <i class="fas fa-arrow-left"></i> Volver al Dashboard
             </a>
         </div>
-        <h2><i class="fas fa-microchip"></i> KubeAgency Control - Gestión de Archivos</h2>
+        <h2><i class="fas fa-headset"></i> KUBE Soporte - Gestión de Archivos</h2>
         <div>
             <a href="logout.php">
                 <i class="fas fa-sign-out-alt"></i> Cerrar Sesión

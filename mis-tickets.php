@@ -286,7 +286,7 @@ $tickets = $stmt->fetchAll();
 <body>
     <div class="header">
         <div><a href="index.php"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a></div>
-        <h2><i class="fas fa-microchip"></i> KubeAgency Control - Mis Tickets</h2>
+        <h2><i class="fas fa-headset"></i> KUBE Soporte - Mis Tickets</h2>
         <div>
             <a href="nuevo-ticket.php" class="btn" style="margin-right: 1rem;">
                 <i class="fas fa-plus"></i> Nuevo Ticket

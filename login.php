@@ -184,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="login-container">
         <div class="logo">
-            <h1>KubeAgency Control</h1>
+            <h1>KUBE Soporte</h1>
             <p>Sistema de Soporte Técnico</p>
         </div>
 

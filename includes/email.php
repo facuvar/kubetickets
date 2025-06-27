@@ -269,7 +269,7 @@ class EmailService {
                     {$content}
                 </div>
                 <div class='footer'>
-                    <div class='logo-small'>KubeAgency Control</div>
+                    <div class='logo-small'>KUBE Soporte</div>
                     <p>Este email fue enviado automáticamente por nuestro sistema de tickets.</p>
                     <p>Por favor, no responda a este email. Para nuevas consultas, cree un ticket en nuestro sistema.</p>
                     <p style='margin-top: 16px; opacity: 0.7;'>© 2024 KubeAgency. Todos los derechos reservados.</p>

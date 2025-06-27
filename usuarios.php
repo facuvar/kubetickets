@@ -477,7 +477,7 @@ $usuarios = $stmt->fetchAll();
                 <i class="fas fa-arrow-left"></i> Volver al Dashboard
             </a>
         </div>
-        <h2><i class="fas fa-microchip"></i> KubeAgency Control - Usuarios</h2>
+        <h2><i class="fas fa-headset"></i> KUBE Soporte - Usuarios</h2>
         <div>
             <a href="logout.php" class="btn btn-secondary">
                 <i class="fas fa-sign-out-alt"></i> Cerrar Sesión

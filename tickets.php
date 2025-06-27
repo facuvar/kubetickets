@@ -436,7 +436,7 @@ $tickets = $stmt->fetchAll();
                 <i class="fas fa-arrow-left"></i> Volver al Dashboard
             </a>
         </div>
-        <h2><i class="fas fa-microchip"></i> KubeAgency Control - Tickets</h2>
+        <h2><i class="fas fa-headset"></i> KUBE Soporte - Tickets</h2>
         <div>
             <a href="logout.php" class="btn btn-secondary">
                 <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
