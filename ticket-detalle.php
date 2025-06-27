@@ -180,8 +180,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("UPDATE tickets SET updated_at = NOW() WHERE id = ?");
                 $stmt->execute([$ticket_id]);
                 
-                // Enviar notificación de nueva respuesta (solo si no es nota interna y el que responde no es el cliente)
-                if (($config['email_notifications'] ?? '1') === '1' && !$is_internal && $_SESSION['user_role'] !== 'cliente') {
+                // Enviar notificaciones de nueva respuesta
+                if (($config['email_notifications'] ?? '1') === '1' && !$is_internal) {
                     require_once 'includes/email.php';
                     $emailService = new EmailService();
                     
@@ -189,9 +189,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $pdo->prepare("
                         SELECT t.*, 
                                cliente.name as cliente_name, cliente.email as cliente_email, cliente.company as cliente_company,
+                               agente.name as agente_name, agente.email as agente_email,
                                responder.name as responder_name
                         FROM tickets t
                         JOIN users cliente ON t.cliente_id = cliente.id
+                        LEFT JOIN users agente ON t.agente_id = agente.id
                         JOIN users responder ON responder.id = ?
                         WHERE t.id = ?
                     ");
@@ -202,7 +204,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->execute([$response_id]);
                     $message_data = $stmt->fetch();
                     
-                    $emailService->notifyNewResponse($ticket_data, $message_data, $ticket_data['responder_name']);
+                    if ($_SESSION['user_role'] === 'cliente') {
+                        // Si es un cliente quien responde, notificar a agentes/admins
+                        $emailService->notifyClientResponse($ticket_data, $message_data, $ticket_data['responder_name']);
+                    } else {
+                        // Si es un agente/admin quien responde, notificar al cliente
+                        $emailService->notifyNewResponse($ticket_data, $message_data, $ticket_data['responder_name']);
+                    }
                 }
                 
                 $message = "Respuesta agregada correctamente.";

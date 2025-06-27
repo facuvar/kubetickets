@@ -534,4 +534,103 @@ class EmailService {
         
         return $this->sendEmail($agent_email, $subject, $body);
     }
+    
+    // Notificar nueva respuesta del cliente a agentes/admins
+    public function notifyClientResponse($ticket_data, $message_data, $client_name) {
+        $subject = "[Respuesta Cliente] {$ticket_data['ticket_number']} - Nueva respuesta de {$client_name}";
+        
+        $content = "
+            <p style='font-size: 16px; margin-bottom: 24px;'>
+                💬 El cliente <strong>{$client_name}</strong> ha respondido en el ticket de soporte.
+            </p>
+            
+            <div class='ticket-card'>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>📋 Número:</span>
+                    <span class='ticket-value'><strong>{$ticket_data['ticket_number']}</strong></span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>📝 Asunto:</span>
+                    <span class='ticket-value'>{$ticket_data['subject']}</span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>👤 Cliente:</span>
+                    <span class='ticket-value'><strong>{$client_name}</strong></span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>📧 Email:</span>
+                    <span class='ticket-value'>{$ticket_data['cliente_email']}</span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>🏢 Empresa:</span>
+                    <span class='ticket-value'>{$ticket_data['cliente_company']}</span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>⚡ Prioridad:</span>
+                    <span class='ticket-value priority-{$ticket_data['priority']}'>
+                        🔥 " . strtoupper($ticket_data['priority']) . "
+                    </span>
+                </div>
+                <div class='ticket-row'>
+                    <span class='ticket-label'>📅 Fecha Respuesta:</span>
+                    <span class='ticket-value'>" . date('d/m/Y H:i', strtotime($message_data['created_at'])) . "</span>
+                </div>
+            </div>
+            
+            <h3 style='color: #3182ce; margin: 24px 0 12px 0; font-size: 18px;'>💭 Respuesta del Cliente:</h3>
+            <div class='description-box'>" . nl2br(htmlspecialchars($message_data['message'])) . "</div>
+            
+            <div style='background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center;'>
+                <p style='margin: 0; font-size: 14px; color: #856404;'>
+                    ⚠️ <strong>Acción Requerida:</strong> El cliente está esperando una respuesta. Mantenga altos los estándares de servicio.
+                </p>
+            </div>
+            
+            <div style='text-align: center; margin: 32px 0;'>
+                <a href='{$this->base_url}/ticket-detalle.php?id={$ticket_data['id']}' class='button'>
+                    💬 Responder al Cliente
+                </a>
+            </div>
+        ";
+        
+        $body = $this->getEmailTemplate("👤 Respuesta del Cliente", $content, $ticket_data['ticket_number']);
+        
+        // Obtener emails de admins y el agente asignado
+        $recipients = [];
+        
+        // Agregar emails de administradores
+        try {
+            $pdo = $this->getPDOConnection();
+            $stmt = $pdo->query("SELECT email FROM users WHERE role = 'admin'");
+            $admin_emails = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $recipients = array_merge($recipients, $admin_emails);
+            
+            // Agregar email del agente asignado si existe
+            if (!empty($ticket_data['agente_email'])) {
+                $recipients[] = $ticket_data['agente_email'];
+            }
+            
+            // Eliminar duplicados
+            $recipients = array_unique($recipients);
+            
+            // Enviar emails
+            foreach ($recipients as $email) {
+                $this->sendEmail($email, $subject, $body);
+            }
+            
+            return true;
+        } catch (Exception $e) {
+            error_log("Error enviando notificación de respuesta cliente: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    private function getPDOConnection() {
+        try {
+            require_once __DIR__ . '/../config.php';
+            return new PDO($dsn, $username, $password, $options);
+        } catch (PDOException $e) {
+            throw new Exception("Error de conexión: " . $e->getMessage());
+        }
+    }
 }
