@@ -628,7 +628,7 @@ class EmailService {
     private function getPDOConnection() {
         try {
             require_once __DIR__ . '/../config.php';
-            return new PDO($dsn, $username, $password, $options);
+            return Config::getInstance()->getDbConnection();
         } catch (PDOException $e) {
             throw new Exception("Error de conexión: " . $e->getMessage());
         }
