@@ -47,12 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $count = $stmt->fetch()['count'];
             $ticket_number = 'KUBE-' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
             
-            // Insertar ticket
-            $stmt = $pdo->prepare("
-                INSERT INTO tickets (ticket_number, cliente_id, subject, description, priority, category, status, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, ?, ?, 'abierto', NOW(), NOW())
-            ");
-            $stmt->execute([$ticket_number, $cliente_id, $subject, $description, $priority, $category]);
+            // Insertar ticket (detectar estructura de tabla Railway vs Localhost)
+            $config_instance = Config::getInstance();
+            if ($config_instance->isRailway()) {
+                // En Railway: usar campo title
+                $stmt = $pdo->prepare("
+                    INSERT INTO tickets (ticket_number, title, subject, description, priority, category, cliente_id, status, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, 'abierto', NOW(), NOW())
+                ");
+                $stmt->execute([$ticket_number, $subject, $subject, $description, $priority, $category, $cliente_id]);
+            } else {
+                // En localhost: usar campo subject
+                $stmt = $pdo->prepare("
+                    INSERT INTO tickets (ticket_number, cliente_id, subject, description, priority, category, status, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, 'abierto', NOW(), NOW())
+                ");
+                $stmt->execute([$ticket_number, $cliente_id, $subject, $description, $priority, $category]);
+            }
             $ticket_id = $pdo->lastInsertId();
             
             // Auto-asignar si es solicitado y es admin
