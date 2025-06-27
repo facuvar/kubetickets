@@ -175,117 +175,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Ticket - KUBE Soporte</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #1a1d29;
-            color: #e2e8f0;
-            min-height: 100vh;
-            font-size: 13px;
-            line-height: 1.4;
-            margin: 0;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1d29 0%, #232840 50%, #1a1d29 100%);
-            z-index: -2;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle at 20% 80%, rgba(79, 209, 199, 0.1) 0%, transparent 50%),
-                              radial-gradient(circle at 80% 20%, rgba(79, 209, 199, 0.08) 0%, transparent 50%),
-                              radial-gradient(circle at 40% 40%, rgba(79, 209, 199, 0.05) 0%, transparent 50%);
-            z-index: -1;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
         }
 
         .header {
-            background: linear-gradient(135deg, #2d3748 0%, #374151 100%);
-            padding: 0.75rem 1.5rem;
+            background: #fff;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e9ecef;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #4a5568;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .header a { color: white; text-decoration: none; }
+        .header a { 
+            color: #6c757d; 
+            text-decoration: none; 
+        }
+
+        .header a:hover {
+            color: #495057;
+        }
+
+        .header h2 {
+            color: #495057;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
 
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
         .form-card {
-            background: rgba(45, 55, 72, 0.95);
-            border-radius: 12px;
+            background: #fff;
+            border-radius: 6px;
             padding: 2rem;
-            border: 1px solid #4a5568;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+            border: 1px solid #e9ecef;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .form-card h1 {
-            color: #4fd1c7;
+            color: #495057;
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
             font-size: 1.5rem;
+            font-weight: 600;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #f7fafc;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #4a5568;
-            border-radius: 6px;
-            background: #2d3748;
-            color: #e2e8f0;
-            font-size: 13px;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #4fd1c7;
-            box-shadow: 0 0 0 3px rgba(79, 209, 199, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
         }
 
         .form-row {
@@ -294,88 +240,108 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             gap: 1rem;
         }
 
-        .btn {
-            background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
-            color: #1a1d29;
-            padding: 0.875rem 2rem;
-            border: none;
-            border-radius: 8px;
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        input[type="text"], 
+        textarea, 
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
             font-size: 14px;
-            font-weight: 600;
+            transition: border-color 0.15s ease;
+        }
+
+        input[type="text"]:focus, 
+        textarea:focus, 
+        select:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: #007bff;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
             text-decoration: none;
+            display: inline-block;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(79, 209, 199, 0.3);
+            background: #0056b3;
         }
 
         .btn-secondary {
-            background: #4a5568;
-            color: #e2e8f0;
+            background: #6c757d;
         }
 
         .btn-secondary:hover {
-            background: #718096;
-            box-shadow: 0 10px 25px rgba(74, 85, 104, 0.3);
+            background: #545b62;
         }
 
         .alert {
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .alert-success {
-            background: rgba(34, 197, 94, 0.15);
-            color: #86efac;
-            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
         .alert-error {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
-        .file-input-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
+        .client-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            font-size: 13px;
         }
 
-        .file-input {
-            opacity: 0;
-            position: absolute;
-            z-index: -1;
+        .client-info strong {
+            color: #0066cc;
         }
 
-        .file-input-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1rem;
-            background: #374151;
-            border: 1px dashed #4a5568;
-            border-radius: 6px;
-            color: #e2e8f0;
+        .file-upload {
+            border: 2px dashed #ced4da;
+            border-radius: 4px;
+            padding: 2rem;
+            text-align: center;
+            background: #f8f9fa;
             cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            justify-content: center;
         }
 
-        .file-input-button:hover {
-            background: #4a5568;
-            border-color: #4fd1c7;
+        .file-upload:hover {
+            border-color: #007bff;
+            background: #f0f8ff;
+        }
+
+        .file-upload input {
+            display: none;
         }
 
         .checkbox-wrapper {
@@ -389,61 +355,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: auto;
         }
 
-        .client-info {
-            background: rgba(79, 209, 199, 0.1);
-            border: 1px solid rgba(79, 209, 199, 0.3);
-            border-radius: 6px;
-            padding: 1rem;
-            margin-top: 0.5rem;
-            font-size: 12px;
-        }
-
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
             }
             
             .container {
-                padding: 1rem;
+                margin: 1rem auto;
+                padding: 0 1rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div><a href="index.php"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a></div>
-        <h2><i class="fas fa-headset"></i> KUBE Soporte - Crear Ticket</h2>
+        <div><a href="index.php">← Volver al Dashboard</a></div>
+        <h2>KUBE Soporte - Crear Ticket</h2>
         <div>
-            <a href="tickets.php" class="btn btn-secondary" style="margin-right: 1rem;">
-                <i class="fas fa-list"></i> Ver Tickets
-            </a>
-            <a href="logout.php" class="btn btn-secondary">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </a>
+            <a href="tickets.php" class="btn btn-secondary" style="margin-right: 1rem;">Ver Tickets</a>
+            <a href="logout.php" class="btn btn-secondary">Cerrar Sesión</a>
         </div>
     </div>
 
     <div class="container">
         <div class="form-card">
-            <h1><i class="fas fa-plus-circle"></i> Crear Nuevo Ticket</h1>
+            <h1>Crear Nuevo Ticket</h1>
             
             <?php if ($message): ?>
                 <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i> <?php echo htmlspecialchars($message); ?>
+                    ✓ <?php echo htmlspecialchars($message); ?>
                 </div>
             <?php endif; ?>
 
             <?php if ($error): ?>
                 <div class="alert alert-error">
-                    <i class="fas fa-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?>
+                    ⚠ <?php echo htmlspecialchars($error); ?>
                 </div>
             <?php endif; ?>
 
             <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="cliente_id">Cliente *</label>
+                    <label for="cliente_id">Seleccionar Cliente / Empresa *</label>
                     <select id="cliente_id" name="cliente_id" required onchange="updateClientInfo()">
-                        <option value="">Seleccionar cliente...</option>
+                        <option value="">-- Seleccione el cliente para quien crear el ticket --</option>
                         <?php foreach ($clientes as $cliente): ?>
                             <option value="<?php echo $cliente['id']; ?>" 
                                     data-name="<?php echo htmlspecialchars($cliente['name']); ?>"
@@ -452,22 +406,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php echo (($_POST['cliente_id'] ?? '') == $cliente['id']) ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($cliente['name']); ?>
                                 <?php if ($cliente['company']): ?>
-                                    - <?php echo htmlspecialchars($cliente['company']); ?>
+                                    (<?php echo htmlspecialchars($cliente['company']); ?>)
                                 <?php endif; ?>
+                                - <?php echo htmlspecialchars($cliente['email']); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                     <div id="client-info" class="client-info" style="display: none;">
-                        <strong>Información del cliente:</strong><br>
+                        <strong>Cliente seleccionado:</strong><br>
                         <span id="client-details"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="subject">Asunto *</label>
+                    <label for="subject">Asunto del Ticket *</label>
                     <input type="text" id="subject" name="subject" required 
                            value="<?php echo htmlspecialchars($_POST['subject'] ?? ''); ?>"
-                           placeholder="Resuma brevemente el problema">
+                           placeholder="Resuma brevemente el problema o solicitud">
                 </div>
 
                 <div class="form-row">
@@ -494,24 +449,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Descripción detallada *</label>
+                    <label for="description">Descripción Detallada *</label>
                     <textarea id="description" name="description" required 
                               placeholder="Describa el problema con el mayor detalle posible..."><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="attachments">Archivos adjuntos (opcional)</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="attachments" name="attachments[]" multiple class="file-input" 
+                    <label>Archivos Adjuntos (opcional)</label>
+                    <div class="file-upload" onclick="document.getElementById('attachments').click()">
+                        <input type="file" id="attachments" name="attachments[]" multiple 
                                accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip,.rar">
-                        <label for="attachments" class="file-input-button">
-                            <i class="fas fa-paperclip"></i>
-                            Seleccionar archivos (máx. 10MB cada uno)
-                        </label>
+                        <div id="file-upload-text">
+                            Haga clic para seleccionar archivos<br>
+                            <small>Máx. 10MB por archivo. Formatos: JPG, PNG, PDF, DOC, DOCX, TXT, ZIP, RAR</small>
+                        </div>
                     </div>
-                    <small style="opacity: 0.7; font-size: 11px;">
-                        Formatos permitidos: JPG, PNG, PDF, DOC, DOCX, TXT, ZIP, RAR
-                    </small>
                 </div>
 
                 <?php if ($_SESSION['user_role'] === 'admin'): ?>
@@ -522,12 +474,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn">
-                        <i class="fas fa-paper-plane"></i> Crear Ticket
-                    </button>
-                    <a href="tickets.php" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> Cancelar
-                    </a>
+                    <button type="submit" class="btn">Crear Ticket</button>
+                    <a href="tickets.php" class="btn btn-secondary">Cancelar</a>
                 </div>
             </form>
         </div>
@@ -545,10 +493,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const email = option.getAttribute('data-email');
                 const company = option.getAttribute('data-company');
                 
-                let details = `<strong>${name}</strong><br>`;
-                details += `📧 ${email}<br>`;
+                let details = `Nombre: <strong>${name}</strong><br>`;
+                details += `Email: ${email}<br>`;
                 if (company) {
-                    details += `🏢 ${company}`;
+                    details += `Empresa: ${company}`;
                 }
                 
                 clientDetails.innerHTML = details;
@@ -558,15 +506,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Actualizar nombre del archivo seleccionado
+        // Mostrar archivos seleccionados
         document.getElementById('attachments').addEventListener('change', function(e) {
-            const label = document.querySelector('.file-input-button');
+            const text = document.getElementById('file-upload-text');
             const fileCount = e.target.files.length;
             
             if (fileCount > 0) {
-                label.innerHTML = `<i class="fas fa-paperclip"></i> ${fileCount} archivo(s) seleccionado(s)`;
+                text.innerHTML = `${fileCount} archivo(s) seleccionado(s)<br><small>Haga clic para cambiar la selección</small>`;
             } else {
-                label.innerHTML = `<i class="fas fa-paperclip"></i> Seleccionar archivos (máx. 10MB cada uno)`;
+                text.innerHTML = `Haga clic para seleccionar archivos<br><small>Máx. 10MB por archivo. Formatos: JPG, PNG, PDF, DOC, DOCX, TXT, ZIP, RAR</small>`;
             }
         });
     </script>
