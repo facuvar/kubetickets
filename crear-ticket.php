@@ -175,38 +175,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Ticket - KUBE Soporte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f8f9fa;
-            color: #333;
-            line-height: 1.5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1d29;
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            width: 100%;
+            min-width: 0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* Fondo minimalista */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1d29 0%, #232840 100%);
+            z-index: -1;
         }
 
         .header {
-            background: #fff;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #e9ecef;
+            background: #2d3748;
+            padding: 0.75rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #4a5568;
+            font-size: 12px;
         }
 
         .header a { 
-            color: #6c757d; 
-            text-decoration: none; 
+            color: #cbd5e0; 
+            text-decoration: none;
+            transition: color 0.2s ease;
         }
 
         .header a:hover {
-            color: #495057;
+            color: #38b2ac;
         }
 
         .header h2 {
-            color: #495057;
-            font-size: 1.2rem;
-            font-weight: 600;
+            color: #f7fafc;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin: 0;
         }
 
         .container {
@@ -216,15 +238,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .form-card {
-            background: #fff;
+            background: #2d3748;
             border-radius: 6px;
             padding: 2rem;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #4a5568;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .form-card h1 {
-            color: #495057;
+            color: #f7fafc;
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
             font-weight: 600;
@@ -243,8 +265,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #495057;
+            color: #e2e8f0;
             font-weight: 500;
+            font-size: 12px;
         }
 
         input[type="text"], 
@@ -252,18 +275,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         select {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #ced4da;
+            border: 1px solid #4a5568;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 12px;
             transition: border-color 0.15s ease;
+            background: #374151;
+            color: #e2e8f0;
         }
 
         input[type="text"]:focus, 
         textarea:focus, 
         select:focus {
             outline: none;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+            border-color: #38b2ac;
+            box-shadow: 0 0 0 0.2rem rgba(56, 178, 172, 0.25);
         }
 
         textarea {
@@ -272,76 +297,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .btn {
-            background: #007bff;
+            background: #38b2ac;
             color: #fff;
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
+            transition: background-color 0.2s ease;
         }
 
         .btn:hover {
-            background: #0056b3;
+            background: #319795;
         }
 
         .btn-secondary {
-            background: #6c757d;
+            background: #6b7280;
+            border: 1px solid #4a5568;
         }
 
         .btn-secondary:hover {
-            background: #545b62;
+            background: #4b5563;
         }
 
         .alert {
             padding: 0.75rem 1rem;
             border-radius: 4px;
             margin-bottom: 1.5rem;
+            font-size: 12px;
         }
 
         .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #065f46;
+            color: #a7f3d0;
+            border: 1px solid #047857;
         }
 
         .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid #b91c1c;
         }
 
         .client-info {
-            background: #e7f3ff;
-            border: 1px solid #b3d9ff;
+            background: #1e3a8a;
+            border: 1px solid #3b82f6;
             border-radius: 4px;
             padding: 1rem;
             margin-top: 0.5rem;
-            font-size: 13px;
+            font-size: 11px;
         }
 
         .client-info strong {
-            color: #0066cc;
+            color: #60a5fa;
         }
 
         .file-upload {
-            border: 2px dashed #ced4da;
+            border: 2px dashed #4a5568;
             border-radius: 4px;
             padding: 2rem;
             text-align: center;
-            background: #f8f9fa;
+            background: #374151;
             cursor: pointer;
+            transition: border-color 0.2s ease;
         }
 
         .file-upload:hover {
-            border-color: #007bff;
-            background: #f0f8ff;
+            border-color: #38b2ac;
+            background: #4b5563;
         }
 
         .file-upload input {
             display: none;
+        }
+
+        .file-upload small {
+            color: #9ca3af;
+            font-size: 10px;
         }
 
         .checkbox-wrapper {
@@ -353,6 +387,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .checkbox-wrapper input[type="checkbox"] {
             width: auto;
+            background: #374151;
+            border: 1px solid #4a5568;
+        }
+
+        .checkbox-wrapper label {
+            margin-bottom: 0;
+            font-size: 12px;
+            color: #cbd5e0;
         }
 
         @media (max-width: 768px) {
@@ -364,22 +406,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin: 1rem auto;
                 padding: 0 1rem;
             }
+            
+            .header {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .header h2 {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div><a href="index.php">← Volver al Dashboard</a></div>
-        <h2>KUBE Soporte - Crear Ticket</h2>
+        <div><a href="index.php"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a></div>
+        <h2><i class="fas fa-plus-circle"></i> KUBE Soporte - Crear Ticket</h2>
         <div>
-            <a href="tickets.php" class="btn btn-secondary" style="margin-right: 1rem;">Ver Tickets</a>
-            <a href="logout.php" class="btn btn-secondary">Cerrar Sesión</a>
+            <a href="tickets.php" class="btn btn-secondary" style="margin-right: 1rem;"><i class="fas fa-list"></i> Ver Tickets</a>
+            <a href="logout.php" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
         </div>
     </div>
 
     <div class="container">
         <div class="form-card">
-            <h1>Crear Nuevo Ticket</h1>
+            <h1><i class="fas fa-ticket-alt"></i> Crear Nuevo Ticket</h1>
             
             <?php if ($message): ?>
                 <div class="alert alert-success">
@@ -460,6 +512,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="file" id="attachments" name="attachments[]" multiple 
                                accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.zip,.rar">
                         <div id="file-upload-text">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #38b2ac; margin-bottom: 0.5rem;"></i><br>
                             Haga clic para seleccionar archivos<br>
                             <small>Máx. 10MB por archivo. Formatos: JPG, PNG, PDF, DOC, DOCX, TXT, ZIP, RAR</small>
                         </div>
@@ -474,8 +527,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
 
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn">Crear Ticket</button>
-                    <a href="tickets.php" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn"><i class="fas fa-plus"></i> Crear Ticket</button>
+                    <a href="tickets.php" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
                 </div>
             </form>
         </div>
@@ -512,9 +565,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const fileCount = e.target.files.length;
             
             if (fileCount > 0) {
-                text.innerHTML = `${fileCount} archivo(s) seleccionado(s)<br><small>Haga clic para cambiar la selección</small>`;
+                text.innerHTML = `<i class="fas fa-check-circle" style="font-size: 2rem; color: #38b2ac; margin-bottom: 0.5rem;"></i><br>${fileCount} archivo(s) seleccionado(s)<br><small>Haga clic para cambiar la selección</small>`;
             } else {
-                text.innerHTML = `Haga clic para seleccionar archivos<br><small>Máx. 10MB por archivo. Formatos: JPG, PNG, PDF, DOC, DOCX, TXT, ZIP, RAR</small>`;
+                text.innerHTML = `<i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #38b2ac; margin-bottom: 0.5rem;"></i><br>Haga clic para seleccionar archivos<br><small>Máx. 10MB por archivo. Formatos: JPG, PNG, PDF, DOC, DOCX, TXT, ZIP, RAR</small>`;
             }
         });
     </script>
