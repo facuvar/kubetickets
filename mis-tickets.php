@@ -396,10 +396,7 @@ $tickets = $stmt->fetchAll();
                                 </div>
                             <?php endif; ?>
                             
-                            <div class="meta-item">
-                                <i class="fas fa-user-tie" style="color: <?php echo $ticket['agente_name'] ? '#4fd1c7' : '#6b7280'; ?>;"></i>
-                                <span>Agente: <?php echo htmlspecialchars($ticket['agente_name'] ?? 'Sin asignar'); ?></span>
-                            </div>
+
                             
                             <?php if ($ticket['total_messages'] > 0): ?>
                                 <div class="meta-item">

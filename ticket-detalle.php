@@ -675,10 +675,12 @@ if ($_SESSION['user_role'] === 'admin') {
                     <div class="meta-value"><?php echo htmlspecialchars($ticket['cliente_name']); ?></div>
                     <div style="font-size: 0.8rem; opacity: 0.8;"><?php echo htmlspecialchars($ticket['cliente_email']); ?></div>
                 </div>
+                <?php if ($_SESSION['user_role'] !== 'cliente'): ?>
                 <div class="meta-item">
                     <div class="meta-label">Agente Asignado</div>
                     <div class="meta-value"><?php echo $ticket['agente_name'] ? htmlspecialchars($ticket['agente_name']) : 'Sin asignar'; ?></div>
                 </div>
+                <?php endif; ?>
                 <div class="meta-item">
                     <div class="meta-label">Creado</div>
                     <div class="meta-value"><?php echo date('d/m/Y H:i', strtotime($ticket['created_at'])); ?></div>
