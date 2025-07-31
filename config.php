@@ -104,7 +104,7 @@ class Config {
     }
     
     public function getSendGridConfig() {
-        $api_key = getenv('SENDGRID_API_KEY') ?: 'YOUR_SENDGRID_API_KEY_HERE';
+        $api_key = getenv('SENDGRID_API_KEY') ?: '';
         $from_email = getenv('SENDGRID_FROM_EMAIL') ?: 'info@kubeagency.co';
         
         return [
